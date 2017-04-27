@@ -17,9 +17,11 @@ import {LOAD_USER_THREADS_ACTION, LoadUserThreadsAction} from './store/actions';
 
 import * as _ from 'lodash';
 
-// storeReducer takes current ApplicationState and an action, runs the action using current state and returns update new ApplicationState
+// storeReducer takes in the current internal state and the action it receives and the output will be the new ApplicationState.
+// The store will then notify all parties that are subscribed to the store that the state has changed.
+
 function storeReducer(
-  state: ApplicationState,
+  state: ApplicationState = INITIAL_APPLICATION_STATE,
   action: Action
 ): ApplicationState {
   switch (action.type) {
@@ -63,7 +65,9 @@ function handleLoadUSerThreadsAction(state: ApplicationState,
     BrowserModule,
     FormsModule,
     HttpModule,
-    StoreModule.provideStore(storeReducer, INITIAL_APPLICATION_STATE)
+    // Can pass in INITIAL_APPLICATION_STATE as second argument or set it as default value for state in storeReducer function.
+      // StoreModule.provideStore(storeReducer, INITIAL_APPLICATION_STATE)
+    StoreModule.provideStore(storeReducer)
   ],
   providers: [ThreadsService],
   bootstrap: [AppComponent]
