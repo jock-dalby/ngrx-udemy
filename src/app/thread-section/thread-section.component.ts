@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreadsService } from './threads.service';
+import { ThreadsService } from '../services/threads.service';
 import {Store} from '@ngrx/store';
 import {ApplicationState} from '../store/application-state';
+import {AllUserData} from '../../../shared/to/all-user-data';
+import {LoadUserThreadsAction} from '../store/actions';
 
 @Component({
   selector: 'thread-selection',
@@ -22,7 +24,12 @@ export class ThreadSelectionComponent implements OnInit {
   ngOnInit() {
     this.threadsService.loadUserThreads()
       .subscribe(
-        console.log
+        (allUserData: AllUserData) => {
+          this.store.dispatch(
+            new LoadUserThreadsAction(allUserData)
+          );
+          // dispatch() dispatches an 'action'. In store/actions.ts when we define LoadUserThreadsAction, the constructor requires us to pass an argument of type AllUserData.
+        }
       );
   }
 

@@ -10,8 +10,43 @@ import { MessageSectionComponent } from './message-section/message-section.compo
 import { ThreadListComponent } from './thread-section/thread-list/thread-list.component';
 import { MessageListComponent } from './message-section/message-list/message-list.component';
 import { HeaderComponent } from './header/header.component';
-import { ThreadsService } from './thread-section/threads.service';
-import {StoreModule} from '@ngrx/store';
+import { ThreadsService } from './services/threads.service';
+import {Action, StoreModule} from '@ngrx/store';
+import {ApplicationState, INITIAL_APPLICATION_STATE} from './store/application-state';
+import {LOAD_USER_THREADS_ACTION, LoadUserThreadsAction} from './store/actions';
+
+import * as _ from 'lodash';
+
+// storeReducer takes current ApplicationState and an action, runs the action using current state and returns update new ApplicationState
+function storeReducer(
+  state: ApplicationState,
+  action: Action
+): ApplicationState {
+  switch (action.type) {
+    case LOAD_USER_THREADS_ACTION:
+      return handleLoadUSerThreadsAction(state, <any>action);
+
+    default:
+      return state;
+  };
+}
+
+function handleLoadUSerThreadsAction(state: ApplicationState,
+                                     action: LoadUserThreadsAction): ApplicationState {
+
+  // It is important that reducer functions never adjust the contents of the state directly. So we always make a copy of the state, adjust it and then re-assign it
+  const newState: ApplicationState = Object.assign({}, state);
+  const userData = action.payload;
+
+  newState.storeData = {
+    // convert array into a map and use the index of the array as an id for the map. Using lodash
+    participants: _.keyBy(userData.participants, 'id'),
+    messages: _.keyBy(userData.messages, 'id'),
+    threads: _.keyBy(userData.threads, 'id')
+  };
+
+  return newState;
+}
 
 
 @NgModule({
@@ -28,7 +63,7 @@ import {StoreModule} from '@ngrx/store';
     BrowserModule,
     FormsModule,
     HttpModule,
-    StoreModule.provideStore({})
+    StoreModule.provideStore(storeReducer, INITIAL_APPLICATION_STATE)
   ],
   providers: [ThreadsService],
   bootstrap: [AppComponent]

@@ -10,5 +10,11 @@ export interface StoreData {
 
   threads: {[key: number]: Thread};
 
-  dbMessages: {[key: number]: Message};
+  messages: {[key: number]: Message};
 }
+
+export const INITIAL_STORE_DATA: StoreData = {
+  participants: {},
+  threads: {},
+  messages: {}
+};
