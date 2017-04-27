@@ -11,6 +11,8 @@ import { ThreadListComponent } from './thread-section/thread-list/thread-list.co
 import { MessageListComponent } from './message-section/message-list/message-list.component';
 import { HeaderComponent } from './header/header.component';
 import { ThreadsService } from './thread-section/threads.service';
+import {StoreModule} from '@ngrx/store';
+
 
 @NgModule({
   declarations: [
@@ -20,15 +22,15 @@ import { ThreadsService } from './thread-section/threads.service';
     MessageSectionComponent,
     ThreadListComponent,
     MessageListComponent,
-    HeaderComponent,
-    ThreadsService
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    StoreModule.provideStore({})
   ],
-  providers: [],
+  providers: [ThreadsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

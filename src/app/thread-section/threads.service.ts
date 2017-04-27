@@ -1,9 +1,12 @@
-import {Http} from "@angular/http";
+import { Injectable } from '@angular/core';
 
+import {Http} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { AllUserData } from '../../../shared/to/all-user-data';
 
 import 'rxjs/Rx';
+
+@Injectable()
 
 export class ThreadsService {
 
@@ -17,3 +20,4 @@ export class ThreadsService {
   }
 
 }
+
