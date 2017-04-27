@@ -3,6 +3,8 @@ import {Http} from "@angular/http";
 import { Observable } from 'rxjs/Observable';
 import { AllUserData } from '../../../shared/to/all-user-data';
 
+import 'rxjs/Rx';
+
 export class ThreadsService {
 
   constructor(
