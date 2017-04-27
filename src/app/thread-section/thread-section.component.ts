@@ -5,6 +5,10 @@ import {ApplicationState} from '../store/application-state';
 import {AllUserData} from '../../../shared/to/all-user-data';
 import {LoadUserThreadsAction} from '../store/actions';
 
+// import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/skip';
+import {Observable} from 'rxjs/Observable';
+
 @Component({
   selector: 'thread-selection',
   templateUrl: './thread-section.component.html',
@@ -12,13 +16,20 @@ import {LoadUserThreadsAction} from '../store/actions';
 })
 export class ThreadSelectionComponent implements OnInit {
 
+  userName$: Observable<string>; // $ is used to signify that a variable is an observable
+
   constructor(
     private threadsService: ThreadsService,
     private store: Store<ApplicationState>
   ) {
-    store.subscribe(
-      console.log
-    )
+    this.userName$ = store
+      .skip(1) // Skip the initial value before the store has been populated
+      .map(this.mapStateToUserName) // map needs a function that operates on the applicationState as an argument.
+  }
+
+  mapStateToUserName(state: ApplicationState): string {
+    const currentUserId = state.uiState.currentUserId;
+    return state.storeData.participants[currentUserId].name;
   }
 
   ngOnInit() {
