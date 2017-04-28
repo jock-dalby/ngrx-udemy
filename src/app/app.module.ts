@@ -13,28 +13,30 @@ import { HeaderComponent } from './header/header.component';
 import { ThreadsService } from './services/threads.service';
 import {Action, StoreModule} from '@ngrx/store';
 import {ApplicationState, INITIAL_APPLICATION_STATE} from './store/application-state';
-import {LOAD_USER_THREADS_ACTION, LoadUserThreadsAction} from './store/actions';
+import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from './store/actions';
 
 import * as _ from 'lodash';
+import {EffectsModule} from '@ngrx/effects';
+import {LoadThreadsEffectService} from 'app/store/effects/load-threads-effect.service';
 
 // storeReducer takes in the current internal state and the action it receives and the output will be the new ApplicationState.
 // The store will then notify all parties that are subscribed to the store that the state has changed.
 
-function storeReducer(
+export function storeReducer(
   state: ApplicationState = INITIAL_APPLICATION_STATE,
   action: Action
 ): ApplicationState {
   switch (action.type) {
-    case LOAD_USER_THREADS_ACTION:
-      return handleLoadUSerThreadsAction(state, <any>action);
+    case USER_THREADS_LOADED_ACTION:
+      return handleUserThreadsLoadedAction(state, <any>action);
 
     default:
       return state;
   };
 }
 
-function handleLoadUSerThreadsAction(state: ApplicationState,
-                                     action: LoadUserThreadsAction): ApplicationState {
+function handleUserThreadsLoadedAction(state: ApplicationState,
+                                     action: UserThreadsLoadedAction): ApplicationState {
 
   // It is important that reducer functions never adjust the contents of the state directly. So we always make a copy of the state, adjust it and then re-assign it
   const newState: ApplicationState = Object.assign({}, state);
@@ -65,6 +67,7 @@ function handleLoadUSerThreadsAction(state: ApplicationState,
     BrowserModule,
     FormsModule,
     HttpModule,
+    EffectsModule.run(LoadThreadsEffectService),
     // Can pass in INITIAL_APPLICATION_STATE as second argument or set it as default value for state in storeReducer function.
       // StoreModule.provideStore(storeReducer, INITIAL_APPLICATION_STATE)
     StoreModule.provideStore(storeReducer)

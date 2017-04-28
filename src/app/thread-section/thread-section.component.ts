@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import { ThreadsService } from '../services/threads.service';
 import {ApplicationState} from '../store/application-state';
 import {AllUserData} from '../../../shared/to/all-user-data';
-import {LoadUserThreadsAction} from '../store/actions';
+import {LoadUserThreadsAction, UserThreadsLoadedAction} from '../store/actions';
 
 // import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
@@ -24,10 +24,7 @@ export class ThreadSelectionComponent implements OnInit {
   unreadMessagesCounter$: Observable<number>;
   threadsSummaries$: Observable<ThreadSummaryVM[]>;
 
-  constructor(
-    private threadsService: ThreadsService,
-    private store: Store<ApplicationState>
-  ) {
+  constructor(private store: Store<ApplicationState>) {
 
     this.userName$ = store
     // .skip(1)  => Skip the initial value. This is so when the app loads if store has not been populated we do not get errors. Best practice is to account for this in your selector functions to make code more robust.
@@ -42,16 +39,11 @@ export class ThreadSelectionComponent implements OnInit {
 
   ngOnInit() {
 
-    // This is a smart component. When it is initialised, we call the backend REST api using the threadsService.
-    this.threadsService.loadUserThreads()
-      .subscribe(
-        (allUserData: AllUserData) => {
-          this.store.dispatch(
-            new LoadUserThreadsAction(allUserData)
-          );
-          // Once we receive the data from the backend we call the store and dispatch an 'action'. We are telling the store there is new data available from the backend and we are passing it in as the payload of this action. The store will then trigger it's reducer function configured in app.module.ts.
-        }
-      );
+    this.store.dispatch(new LoadUserThreadsAction());
+
   }
 
 }
+
+// SUMMARY: This implementation of this smart component is minimal; We are only injecting the store.
+// If this was a larger application with multiple services, by injecting them into the store we do not need to have them operating in multiple components. In smart components implemented this way we simply inject the store, dispatch actions back to it and the effects services will load/save any data to the backend. In this component we also define the Observables that the view needs and configure the mapping selector functions that we need from the ApplicationState to the ViewModel, in the constructor.
