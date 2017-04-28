@@ -3,9 +3,9 @@
 import {INITIAL_STORE_DATA, StoreData} from '../store.data';
 import {Action} from '@ngrx/store';
 import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from '../actions';
+import * as _ from 'lodash';
 
-
-export function storeDataReducer(state: StoreData = INITIAL_STORE_DATA, action: Action): StoreData {
+export function storeData(state: StoreData = INITIAL_STORE_DATA, action: Action): StoreData {
   switch (action.type) {
     case USER_THREADS_LOADED_ACTION:
       return handleUserThreadsLoadedAction(state, <any>action);
@@ -15,7 +15,7 @@ export function storeDataReducer(state: StoreData = INITIAL_STORE_DATA, action: 
   }
 }
 
-function handleUserThreadsLoadedAction(state: StoreData,
+export function handleUserThreadsLoadedAction(state: StoreData,
                                        action: UserThreadsLoadedAction): StoreData {
   return {
     // convert array into a map and use the index of the array as an id for the map. Using lodash

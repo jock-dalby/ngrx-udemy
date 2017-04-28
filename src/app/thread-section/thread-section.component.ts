@@ -44,7 +44,6 @@ export class ThreadSelectionComponent implements OnInit {
   }
 
   onThreadSelected(selectedThreadId: number) {
-    console.log(selectedThreadId);
     this.store.dispatch(new ThreadSelectedAction(selectedThreadId));
   }
 
