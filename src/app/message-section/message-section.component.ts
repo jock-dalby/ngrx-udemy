@@ -13,7 +13,7 @@ export class MessageSectionComponent implements OnInit {
     private store: Store<ApplicationState>
   ) {
     store.subscribe(
-      state => console.log("message section received state", state)
+      // state => console.log("message section received state", state)
     );
   }
 

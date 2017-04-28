@@ -18,6 +18,7 @@ import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from './store/actio
 import * as _ from 'lodash';
 import {EffectsModule} from '@ngrx/effects';
 import {LoadThreadsEffectService} from 'app/store/effects/load-threads-effect.service';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 // storeReducer takes in the current internal state and the action it receives and the output will be the new ApplicationState.
 // The store will then notify all parties that are subscribed to the store that the state has changed.
@@ -70,7 +71,8 @@ function handleUserThreadsLoadedAction(state: ApplicationState,
     EffectsModule.run(LoadThreadsEffectService),
     // Can pass in INITIAL_APPLICATION_STATE as second argument or set it as default value for state in storeReducer function.
       // StoreModule.provideStore(storeReducer, INITIAL_APPLICATION_STATE)
-    StoreModule.provideStore(storeReducer)
+    StoreModule.provideStore(storeReducer),
+    StoreDevtoolsModule.instrumentOnlyWithExtension()
   ],
   providers: [ThreadsService],
   bootstrap: [AppComponent]
