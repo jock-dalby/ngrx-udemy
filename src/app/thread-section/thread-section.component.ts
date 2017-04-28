@@ -5,15 +5,13 @@ import { ThreadsService } from '../services/threads.service';
 import {ApplicationState} from '../store/application-state';
 import {AllUserData} from '../../../shared/to/all-user-data';
 import {LoadUserThreadsAction} from '../store/actions';
-import {Thread} from '../../../shared/model/thread';
 
-// import 'rxjs/add/operator/map';
-import * as _ from 'lodash';
-import 'rxjs/add/operator/skip';
+// import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
 import {ThreadSummaryVM} from './thread-summary.vm';
 import {mapToUnreadMessagesCounter} from './mapToUnreadMessagesCounter';
-import {mapStateToUserName} from './mapStateToUserName';
+import {userNameSelector} from './userNameSelector';
+import {stateToThreadSummariesSelector} from './stateToThreadSummariesSelector';
 
 @Component({
   selector: 'thread-selection',
@@ -32,35 +30,15 @@ export class ThreadSelectionComponent implements OnInit {
   ) {
 
     this.userName$ = store
-      .skip(1) // Skip the initial value before the store has been populated
-      .map(mapStateToUserName); // map needs a function that operates on the applicationState as an argument.
+    // .skip(1)  => Skip the initial value. This is so when the app loads if store has not been populated we do not get errors. Best practice is to account for this in your selector functions to make code more robust.
+      .map(userNameSelector); // map needs a function that operates on the applicationState as an argument.
 
-    this.unreadMessagesCounter$ = store
-      .skip(1)
-      .map(mapToUnreadMessagesCounter);
+    this.unreadMessagesCounter$ = store.map(mapToUnreadMessagesCounter);
 
-    this.threadsSummaries$ = store.select(
-      state => {
-        const threads = _.values<Thread>(state.storeData.threads);
-
-        return threads.map(thread => {
-
-          const names = _.keys(thread.participants).map(
-            participantId => state.storeData.participants[participantId].name);
-
-          const lastMessageId = _.last(thread.messageIds),
-            lastMessage = state.storeData.messages[lastMessageId];
-
-          return {
-            id: thread.id,
-            participantNames: _.join(names, ', '),
-            lastMessageText: state.storeData.messages[lastMessageId].text,
-            timestamp: lastMessage.timestamp
-          };
-        });
-      }
-    );
+    this.threadsSummaries$ = store.select(stateToThreadSummariesSelector);
   }
+
+  // Above we define Observables with both the map() function and using the select call the store. These two ways of transforming the store application state into the viewModel that the component needs are equivalent. They are both ways of applying a mapping of two models and in this instance can be used interchangeably.
 
   ngOnInit() {
 

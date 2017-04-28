@@ -8,6 +8,6 @@ export function mapToUnreadMessagesCounter(state: ApplicationState): number {
   // _.value() will return an array of values (not keys) of given argument. We are specifying an array of type 'Thread'
   return _.values<Thread>(state.storeData.threads)
     .reduce(
-      (accumulator, thread) => accumulator + thread.participants[currentUserId]
+      (accumulator, thread) => accumulator + (thread.participants[currentUserId] || 0) // resistant to undefined being returned.
       , 0); // 0 is initial value of accumulator. thread implicitly refers to the result of the _.values() function.
 }
