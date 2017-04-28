@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import { ThreadSummaryVM } from '../thread-summary.vm';
 
 @Component({
   selector: 'thread-list',
@@ -6,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./thread-list.component.css']
 })
 export class ThreadListComponent implements OnInit {
+
+  @Input() threads: ThreadSummaryVM[];
 
   constructor() { }
 

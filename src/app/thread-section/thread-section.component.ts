@@ -7,10 +7,13 @@ import {AllUserData} from '../../../shared/to/all-user-data';
 import {LoadUserThreadsAction} from '../store/actions';
 import {Thread} from '../../../shared/model/thread';
 
-import * as _ from 'lodash';
 // import 'rxjs/add/operator/map';
+import * as _ from 'lodash';
 import 'rxjs/add/operator/skip';
 import {Observable} from 'rxjs/Observable';
+import {ThreadSummaryVM} from './thread-summary.vm';
+import {mapToUnreadMessagesCounter} from './mapToUnreadMessagesCounter';
+import {mapStateToUserName} from './mapStateToUserName';
 
 @Component({
   selector: 'thread-selection',
@@ -21,6 +24,7 @@ export class ThreadSelectionComponent implements OnInit {
 
   userName$: Observable<string>; // $ is used to signify that a variable is an observable
   unreadMessagesCounter$: Observable<number>;
+  threadsSummaries$: Observable<ThreadSummaryVM[]>;
 
   constructor(
     private threadsService: ThreadsService,
@@ -29,25 +33,33 @@ export class ThreadSelectionComponent implements OnInit {
 
     this.userName$ = store
       .skip(1) // Skip the initial value before the store has been populated
-      .map(this.mapStateToUserName); // map needs a function that operates on the applicationState as an argument.
+      .map(mapStateToUserName); // map needs a function that operates on the applicationState as an argument.
 
     this.unreadMessagesCounter$ = store
       .skip(1)
-      .map(this.mapToUnreadMessagesCounter);
-  }
+      .map(mapToUnreadMessagesCounter);
 
-  mapStateToUserName(state: ApplicationState): string {
-    const currentUserId = state.uiState.currentUserId;
-    return state.storeData.participants[currentUserId].name;
-  }
+    this.threadsSummaries$ = store.select(
+      state => {
+        const threads = _.values<Thread>(state.storeData.threads);
 
-  mapToUnreadMessagesCounter(state: ApplicationState): number {
-    const currentUserId = state.uiState.currentUserId;
-    // _.value() will return an array of values (not keys) of given argument. We are specifying an array of type 'Thread'
-    return _.values<Thread>(state.storeData.threads)
-      .reduce(
-        (accumulator, thread) => accumulator + thread.participants[currentUserId]
-        , 0); // 0 is initial value of accumulator. thread implicitly refers to the result of the _.values() function.
+        return threads.map(thread => {
+
+          const names = _.keys(thread.participants).map(
+            participantId => state.storeData.participants[participantId].name);
+
+          const lastMessageId = _.last(thread.messageIds),
+            lastMessage = state.storeData.messages[lastMessageId];
+
+          return {
+            id: thread.id,
+            participantNames: _.join(names, ', '),
+            lastMessageText: state.storeData.messages[lastMessageId].text,
+            timestamp: lastMessage.timestamp
+          };
+        });
+      }
+    );
   }
 
   ngOnInit() {

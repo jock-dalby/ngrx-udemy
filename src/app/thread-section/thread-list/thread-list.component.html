@@ -1,3 +1,17 @@
-<p>
-  thread-list works!
-</p>
+<div class="row">
+  <div class="col-xs-12">
+    <ul class="thread-list">
+      <li class="thread-list-item" *ngFor="let thread of threads">
+        <div class="row">
+          <div class="col-xs-10">
+            <h5 class="thread-name">{{thread.participantNames}}</h5>
+          </div>
+          <div class="col-xs-2">
+            <div class="thread-time">{{thread.timestamp | date : 'shortTime'}}</div>
+          </div>
+        </div>
+        <div class="thread-last-message">{{thread.lastMessageText}}</div>
+      </li>
+    </ul>
+  </div>
+</div>
