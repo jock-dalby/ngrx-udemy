@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import { ThreadsService } from '../services/threads.service';
 import {ApplicationState} from '../store/application-state';
 import {AllUserData} from '../../../shared/to/all-user-data';
-import {LoadUserThreadsAction, UserThreadsLoadedAction} from '../store/actions';
+import {LoadUserThreadsAction, ThreadSelectedAction, UserThreadsLoadedAction} from '../store/actions';
 
 // import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
@@ -41,6 +41,11 @@ export class ThreadSelectionComponent implements OnInit {
 
     this.store.dispatch(new LoadUserThreadsAction());
 
+  }
+
+  onThreadSelected(selectedThreadId: number) {
+    console.log(selectedThreadId);
+    this.store.dispatch(new ThreadSelectedAction(selectedThreadId));
   }
 
 }

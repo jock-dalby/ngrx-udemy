@@ -13,44 +13,26 @@ import { HeaderComponent } from './header/header.component';
 import { ThreadsService } from './services/threads.service';
 import {Action, StoreModule} from '@ngrx/store';
 import {ApplicationState, INITIAL_APPLICATION_STATE} from './store/application-state';
-import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from './store/actions';
 
-import * as _ from 'lodash';
 import {EffectsModule} from '@ngrx/effects';
 import {LoadThreadsEffectService} from 'app/store/effects/load-threads-effect.service';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {uiStateReducer} from './store/reducers/uiStateReducer';
+import {storeDataReducer} from "app/store/reducers/storeDataReducer";
 
 // storeReducer takes in the current internal state and the action it receives and the output will be the new ApplicationState.
 // The store will then notify all parties that are subscribed to the store that the state has changed.
+// storeReducer must produce a new state and not mutate the existing state.
 
 export function storeReducer(
   state: ApplicationState = INITIAL_APPLICATION_STATE,
   action: Action
 ): ApplicationState {
-  switch (action.type) {
-    case USER_THREADS_LOADED_ACTION:
-      return handleUserThreadsLoadedAction(state, <any>action);
 
-    default:
-      return state;
+  return {
+    uiState: uiStateReducer(state.uiState, action),
+    storeData: storeDataReducer(state.storeData, action)
   };
-}
-
-function handleUserThreadsLoadedAction(state: ApplicationState,
-                                     action: UserThreadsLoadedAction): ApplicationState {
-
-  // It is important that reducer functions never adjust the contents of the state directly. So we always make a copy of the state, adjust it and then re-assign it
-  const newState: ApplicationState = Object.assign({}, state);
-  const userData = action.payload;
-
-  newState.storeData = {
-    // convert array into a map and use the index of the array as an id for the map. Using lodash
-    participants: _.keyBy(userData.participants, 'id'),
-    messages: _.keyBy(userData.messages, 'id'),
-    threads: _.keyBy(userData.threads, 'id')
-  };
-
-  return newState;
 }
 
 

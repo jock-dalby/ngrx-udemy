@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-xs-12">
     <ul class="thread-list">
-      <li class="thread-list-item" *ngFor="let thread of threads">
+      <li class="thread-list-item" *ngFor="let thread of threads" (click)="selectThread(thread.id)">
         <div class="row">
           <div class="col-xs-10">
             <h5 class="thread-name">{{thread.participantNames}}</h5>

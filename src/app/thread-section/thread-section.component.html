@@ -7,6 +7,6 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <thread-list [threads]="threadsSummaries$ | async"></thread-list>
+    <thread-list [threads]="threadsSummaries$ | async" (threadSelected)="onThreadSelected($event)"></thread-list>
   </div>
 </div>
