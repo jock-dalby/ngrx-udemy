@@ -9,7 +9,7 @@ import { ThreadSummaryVM } from '../thread-summary.vm';
 export class ThreadListComponent implements OnInit {
 
   @Input() threads: ThreadSummaryVM[];
-
+  @Input() currentSelectedThreadId: number;
 
   @Output() threadSelected = new EventEmitter();
 

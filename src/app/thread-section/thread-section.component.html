@@ -7,6 +7,10 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <thread-list [threads]="threadsSummaries$ | async" (threadSelected)="onThreadSelected($event)"></thread-list>
+    <thread-list
+      [threads]="threadsSummaries$ | async"
+      (threadSelected)="onThreadSelected($event)"
+      [currentSelectedThreadId] = "currentSelectedThreadId$ | async"
+    ></thread-list>
   </div>
 </div>

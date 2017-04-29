@@ -14,7 +14,7 @@ import {userNameSelector} from './userNameSelector';
 import {stateToThreadSummariesSelector} from './stateToThreadSummariesSelector';
 
 @Component({
-  selector: 'thread-selection',
+  selector: 'thread-section',
   templateUrl: './thread-section.component.html',
   styleUrls: ['./thread-section.component.css']
 })
@@ -23,6 +23,7 @@ export class ThreadSelectionComponent implements OnInit {
   userName$: Observable<string>; // $ is used to signify that a variable is an observable
   unreadMessagesCounter$: Observable<number>;
   threadsSummaries$: Observable<ThreadSummaryVM[]>;
+  currentSelectedThreadId$: Observable<number>;
 
   constructor(private store: Store<ApplicationState>) {
 
@@ -33,6 +34,10 @@ export class ThreadSelectionComponent implements OnInit {
     this.unreadMessagesCounter$ = store.map(mapToUnreadMessagesCounter);
 
     this.threadsSummaries$ = store.select(stateToThreadSummariesSelector);
+
+    this.currentSelectedThreadId$ = store.select(
+      (state: ApplicationState): number => state.uiState.currentThreadId
+    );
   }
 
   // Above we define Observables with both the map() function and using the select call the store. These two ways of transforming the store application state into the viewModel that the component needs are equivalent. They are both ways of applying a mapping of two models and in this instance can be used interchangeably.

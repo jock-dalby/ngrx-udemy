@@ -12,3 +12,7 @@ h5 {
   color: darkorange;
   font-weight: bolder;
 }
+
+.selected {
+  background: lightgoldenrodyellow;
+}

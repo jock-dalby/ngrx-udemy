@@ -7,5 +7,5 @@ export function buildThreadParticipantsList(state: ApplicationState, thread: Thr
   const names = _.keys(thread.participants).map(
     participantId => state.storeData.participants[participantId].name);
 
-  return _.join(names, ',');
+  return _.join(names, ', ');
 }
