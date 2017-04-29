@@ -1,5 +1,3 @@
-
-
 import {INITIAL_STORE_DATA, StoreData} from '../store.data';
 import {Action} from '@ngrx/store';
 import {
@@ -7,6 +5,9 @@ import {
   UserThreadsLoadedAction
 } from '../actions';
 import * as _ from 'lodash';
+import {Message} from '../../../../shared/model/message';
+
+const uuid = require('uuid/V4');
 
 export function storeData(state: StoreData = INITIAL_STORE_DATA, action: Action): StoreData {
   switch (action.type) {
@@ -37,5 +38,21 @@ function handleUserThreadsLoadedAction(state: StoreData,
 
 function handleSendNewMessageAction(state: StoreData,
                                     action: SendNewMessageAction): StoreData {
-  return state;
+
+  const newStoreState = _.cloneDeep(state);
+  const currentThread = newStoreState.threads[action.payload.threadId];
+
+  const newMessage: Message = {
+    text: action.payload.text,
+    threadId: action.payload.threadId,
+    timestamp: new Date().getTime(),
+    participantId: action.payload.participantId,
+    id: uuid()
+  }
+
+  currentThread.messageIds.push(newMessage.id);
+
+  newStoreState.messages[newMessage.id] = newMessage;
+
+  return newStoreState;
 }

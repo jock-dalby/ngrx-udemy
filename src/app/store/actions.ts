@@ -45,11 +45,17 @@ export class SelectUserAction implements Action {
   }
 }
 
+export interface SendNewMessageActionPayload {
+  text: string;
+  threadId: number;
+  participantId: number
+}
+
 export class SendNewMessageAction implements Action {
 
   readonly type = 'SEND_NEW_MESSAGE_ACTION';
 
-  constructor(public payload: string) {
+  constructor(public payload?: SendNewMessageActionPayload) {
 
   }
 }
