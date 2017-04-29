@@ -2,20 +2,25 @@
 
 import {INITIAL_STORE_DATA, StoreData} from '../store.data';
 import {Action} from '@ngrx/store';
-import {USER_THREADS_LOADED_ACTION, UserThreadsLoadedAction} from '../actions';
+import {
+  SEND_NEW_MESSAGE_ACTION, SendNewMessageAction, USER_THREADS_LOADED_ACTION,
+  UserThreadsLoadedAction
+} from '../actions';
 import * as _ from 'lodash';
 
 export function storeData(state: StoreData = INITIAL_STORE_DATA, action: Action): StoreData {
   switch (action.type) {
     case USER_THREADS_LOADED_ACTION:
       return handleUserThreadsLoadedAction(state, <any>action);
+    case SEND_NEW_MESSAGE_ACTION:
+      return handleSendNewMessageAction(state, <any>action);
 
     default:
       return state;
   }
 }
 
-export function handleUserThreadsLoadedAction(state: StoreData,
+function handleUserThreadsLoadedAction(state: StoreData,
                                        action: UserThreadsLoadedAction): StoreData {
   return {
     // convert array into a map and use the index of the array as an id for the map. Using lodash
@@ -28,4 +33,9 @@ export function handleUserThreadsLoadedAction(state: StoreData,
   // It is important that reducer functions never adjust the contents of the state directly. So we always make a copy of the state, adjust it and then re-assign it
   // const newState: StoreData = Object.assign({}, state);
   // const userData = action.payload;
+}
+
+function handleSendNewMessageAction(state: StoreData,
+                                    action: SendNewMessageAction): StoreData {
+  return state;
 }

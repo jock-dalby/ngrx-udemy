@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {Store} from '@ngrx/store';
+import { Component  } from '@angular/core';
+import { Store } from '@ngrx/store';
 
-import { ThreadsService } from '../services/threads.service';
-import {ApplicationState} from '../store/application-state';
-import {AllUserData} from '../../../shared/to/all-user-data';
-import {LoadUserThreadsAction, ThreadSelectedAction, UserThreadsLoadedAction} from '../store/actions';
+import { ApplicationState } from '../store/application-state';
+import { ThreadSelectedAction } from '../store/actions';
 
-// import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
 import {ThreadSummaryVM} from './thread-summary.vm';
 import {mapToUnreadMessagesCounter} from './mapToUnreadMessagesCounter';
@@ -18,7 +15,7 @@ import {stateToThreadSummariesSelector} from './stateToThreadSummariesSelector';
   templateUrl: './thread-section.component.html',
   styleUrls: ['./thread-section.component.css']
 })
-export class ThreadSelectionComponent implements OnInit {
+export class ThreadSelectionComponent {
 
   userName$: Observable<string>; // $ is used to signify that a variable is an observable
   unreadMessagesCounter$: Observable<number>;
@@ -41,12 +38,6 @@ export class ThreadSelectionComponent implements OnInit {
   }
 
   // Above we define Observables with both the map() function and using the select call the store. These two ways of transforming the store application state into the viewModel that the component needs are equivalent. They are both ways of applying a mapping of two models and in this instance can be used interchangeably.
-
-  ngOnInit() {
-
-    this.store.dispatch(new LoadUserThreadsAction());
-
-  }
 
   onThreadSelected(selectedThreadId: number) {
     this.store.dispatch(new ThreadSelectedAction(selectedThreadId));

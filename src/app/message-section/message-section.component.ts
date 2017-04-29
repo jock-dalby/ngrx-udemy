@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {ApplicationState} from '../store/application-state';
 import {Observable} from 'rxjs/Observable';
 import {MessageVM} from './message.vm';
 import {messagesSelector} from './messagesSelector';
 import {messageParticipantNamesSelector} from './messageParticipantNamesSelector';
+import {sendNewMessageAction} from '../store/actions';
 
 @Component({
   selector: 'message-section',
@@ -24,5 +25,10 @@ export class MessageSectionComponent {
     this.messages$ = store.select(messagesSelector);
 
   }
+
+  onNewMessage(input: any) {
+    this.store.dispatch(new sendNewMessageAction(input.value));
+  }
+
 
 }

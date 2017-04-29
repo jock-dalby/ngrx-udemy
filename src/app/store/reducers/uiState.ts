@@ -35,7 +35,7 @@ function handleSelectUserAction(state: UiState,
                                 action: SelectUserAction): UiState {
   return {
     currentUserId: action.payload,
-    currentThreadId: state.currentThreadId
+    currentThreadId: undefined
   };
 }
 
