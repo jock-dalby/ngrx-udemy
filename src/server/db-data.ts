@@ -6,23 +6,23 @@ import {Message} from '../../shared/model/message';
 export const dbParticipants: {[key: number]: Participant} = {
   1: {
     id: 1,
-    name: 'Alice'
+    name: 'Jock'
   },
   2: {
     id: 2,
-    name: 'Bob'
+    name: 'Nele'
   },
   3: {
     id: 3,
-    name: 'Chuck'
+    name: 'Pete'
   },
   4: {
     id: 4,
-    name: 'David'
+    name: 'Nad'
   },
   5: {
     id: 5,
-    name: 'Erin'
+    name: 'Jay'
   }
 };
 
@@ -32,7 +32,7 @@ export const dbThreads: {[key: number]: Thread} = {
     id: 1,
     messageIds: [1, 2, 3, 4, 5],
     participants: {
-      1: 0,
+      1: 2,
       2: 0
     }
   },
@@ -41,7 +41,7 @@ export const dbThreads: {[key: number]: Thread} = {
     messageIds: [6, 7, 8, 9, 10],
     participants: {
       1: 0,
-      3: 0,
+      3: 1,
       4: 0
     }
 
@@ -50,9 +50,9 @@ export const dbThreads: {[key: number]: Thread} = {
     id: 3,
     messageIds: [11, 12, 13, 14],
     participants: {
-      1: 0,
+      1: 3,
       3: 0,
-      4: 0,
+      4: 2,
       5: 0
     }
   }

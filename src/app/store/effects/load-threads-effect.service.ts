@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {ThreadsService} from '../../services/threads.service';
 import {Actions, Effect} from '@ngrx/effects';
-import {LOAD_USER_THREADS_ACTION, UserThreadsLoadedAction} from '../actions';
+import {LOAD_USER_THREADS_ACTION, LoadUserThreadsAction, SELECT_USER_ACTION, UserThreadsLoadedAction} from '../actions';
 import {Observable} from 'rxjs/Observable';
 import {Action} from '@ngrx/store';
 
@@ -21,6 +21,11 @@ export class LoadThreadsEffectService {
     .do(val => console.log('data received via Http request', val))
     .debug('Debug action received') // See debug declaration in main.ts file
     .map(alluserData => new UserThreadsLoadedAction(alluserData)); // When we get data back, we map the value and create a new instance of UserThreadsLoadedAction and pass it the data
+
+  @Effect() newUserSelected$: Observable<Action> = this.actions$
+    .ofType(SELECT_USER_ACTION)
+    .debug('New user selected')
+    .map(() => new LoadUserThreadsAction());
 }
 
 // The Actions Observable from '@ngrx/effects' will emit a value (actions$) for  each action we dispatch to the store.
